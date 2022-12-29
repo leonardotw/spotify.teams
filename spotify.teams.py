@@ -116,7 +116,7 @@ if ((result["access_token"]) and (MessageMusic)):
     #Set and format ExpirityDateTime
     now = datetime.now(timezone.utc)
     TimeRemain= cplay['item']['duration_ms'] - cplay['progress_ms']
-    now5m = now + timedelta(milliseconds = TimeRemain)
+    TimeEnd = now + timedelta(milliseconds = TimeRemain)
     #Set Json
     MusicJson = {
     "statusMessage": {
@@ -125,7 +125,7 @@ if ((result["access_token"]) and (MessageMusic)):
             "contentType": "text"
         },
         "expiryDateTime": {
-            "dateTime": now5m.isoformat(),
+            "dateTime": TimeEnd.isoformat(),
             "timeZone": "UTC"
         }
     }

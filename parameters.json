@@ -1,6 +1,0 @@
-{
-    "authority": "https://login.microsoftonline.com/organizations",
-    "client_id": "501c77bd-a3ee-4746-afb0-c0770efbe48b",
-    "scope": ["Presence.ReadWrite"],
-    "endpoint": "https://graph.microsoft.com/beta/me/profile"
-}

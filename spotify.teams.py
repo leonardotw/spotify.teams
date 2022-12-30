@@ -9,7 +9,7 @@ import logging
 import atexit
 from datetime import datetime, timedelta, timezone
 
-
+# Load Settins
 dotenv.load_dotenv() # Load Spotify Credentials
 config = json.load(open('Azure.json')) #Load Azure Credentials
 
@@ -26,11 +26,14 @@ config = json.load(open('Azure.json')) #Load Azure Credentials
 #     "userid": "user id "
 # }
 
+#Variables 
+
 TeamsSetEndpoint = "https://graph.microsoft.com/beta/users/%s/presence/setStatusMessage" % config["userid"]
 TeamsGetEndpoint = "https://graph.microsoft.com/beta/users/%s/presence" % config["userid"]
+MessageMusic = None
 
-# Optional logging
-logging.basicConfig(filename='spotify.log',level=logging.ERROR)  # Enable DEBUG log for entire script
+# logging
+logging.basicConfig(filename='spotify.log',level=logging.INFO)  # Enable DEBUG log for entire script
 
 #Spotify
 
@@ -39,11 +42,10 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 cplay = sp.current_user_playing_track()
 try:
     if (cplay['is_playing'] == True):
-        MessageMusic = "Ouvindo: %s - %s" % (cplay['item']['artists'][0]['name'], cplay['item']['name'])
-    else:
-        MessageMusic = None
+        MessageMusic = "Ouvindo: %s - %s" % (cplay['item']['artists'][0]['name'], cplay['item']['name']) # Status Message
+        logging.info('Music Set %s' % cplay['item']['name'])
 except:
-    MessageMusic = None
+    logging.info("No Music Set")
 
 #Azure
 
@@ -103,11 +105,11 @@ if not result:
         # and then keep calling acquire_token_by_device_flow(flow) in your own customized loop.
 
 if "access_token" in result:
-    print("Token OK")
+    logging.info("Token OK")
 else:
-    print(result.get("error"))
-    print(result.get("error_description"))
-    print(result.get("correlation_id"))  # You may need this when reporting a bug
+    logging.error(result.get("error"))
+    logging.error(result.get("error_description"))
+    logging.error(result.get("correlation_id"))  # You may need this when reporting a bug
 
 # Update Message
 
@@ -136,7 +138,7 @@ if ((result["access_token"]) and (MessageMusic)):
         headers={'Authorization': 'Bearer ' + result['access_token']},
         )
     #Get Status Message
-    graph_data = requests.get(  
-        TeamsGetEndpoint,
-        headers={'Authorization': 'Bearer ' + result['access_token']},
-        )
+    # graph_data = requests.get(  
+    #     TeamsGetEndpoint,
+    #     headers={'Authorization': 'Bearer ' + result['access_token']},
+    #     )

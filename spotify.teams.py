@@ -9,6 +9,12 @@ import logging
 import atexit
 from datetime import datetime, timedelta, timezone
 
+#Set WorkDir
+
+WorkDir = os.path.dirname(os.path.realpath(__file__))  # get's the path of the script
+os.chdir(WorkDir)
+
+
 # Load Settins
 dotenv.load_dotenv() # Load Spotify Credentials
 config = json.load(open('Azure.json')) #Load Azure Credentials
